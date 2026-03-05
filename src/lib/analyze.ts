@@ -35,6 +35,14 @@ export const AiPrompt = async (sysPrompt: string, dir: string) => {
 	const file = Bun.file("./reports/" + reportName + ".md");
 	const writer = file.writer();
 
+	try {
+		const promptFile = Bun.file("./prompts/" + sysPrompt);
+		console.info("Using prompt from file...\n");
+		sysPrompt = await promptFile.text();
+	} catch (err) {
+		console.info("Using prompt from user input...\n");
+	}
+
 	await writer.write(`User prompt: ${sysPrompt}\n\n`);
 	await writer.flush();
 
@@ -48,11 +56,11 @@ export const AiPrompt = async (sysPrompt: string, dir: string) => {
 			const messages: ModelMessage[] = [];
 			messages.push({
 				role: "system",
-				content: sysPrompt,
+				content: "Be as concise as possible",
 			});
 			messages.push({
 				role: "user",
-				content: "Analyze this content:\n" + (await file.text()),
+				content: sysPrompt + "\npage content:\n" + (await file.text()),
 			});
 
 			const { text } = await generateText({
@@ -66,7 +74,6 @@ export const AiPrompt = async (sysPrompt: string, dir: string) => {
 			writer.flush();
 			urlCache[url] = true;
 		}
-		break;
 	}
 
 	console.log("Finished writing report to reports/" + reportName + ".md");

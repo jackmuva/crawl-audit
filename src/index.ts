@@ -66,6 +66,11 @@ const setupDirectoryEnv = (domain: string) => {
 	if (!fs.existsSync("./reports")) {
 		fs.mkdirSync("./reports");
 	}
+
+
+	if (!fs.existsSync("./prompts")) {
+		fs.mkdirSync("./prompts");
+	}
 }
 
 await main();
