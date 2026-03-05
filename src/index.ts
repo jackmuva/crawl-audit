@@ -4,15 +4,15 @@ import { crawlAndWatch } from "./lib/crawl";
 import { AiPrompt, searchByText } from "./lib/analyze";
 
 const main = async () => {
-	const welcomeMessage = figlet.textSync('Crawl Audit!');
+	const welcomeMessage = figlet.textSync('Crawl Audit');
 	console.log(welcomeMessage);
 
-	let domainInput = prompt("Domain to crawl and analyze (default is useparagon.com):");
+	let domainInput = prompt("\nDomain to crawl and analyze (default is useparagon.com):");
 	if (!domainInput) domainInput = "useparagon.com";
 
 	setupDirectoryEnv(domainInput);
 
-	let modeInput = prompt("Would you like to trigger a new crawl [0] or analyze the pages from last crawl [1] [Type either 0 or 1]:");
+	let modeInput = prompt("\n[0] Crawl URL \n[1] Analyze last crawl \nType either 0 or 1:");
 
 	while (true) {
 		if (modeInput === "0") {
@@ -20,7 +20,7 @@ const main = async () => {
 			break;
 		} else if (modeInput === "1") {
 			while (true) {
-				let analyzeInput = prompt("Would you like to perform a string match [0] or an agent command [1] [Type either 0 or 1]:");
+				let analyzeInput = prompt("\n[0] string match \n[1] agent \nType either 0 or 1:");
 				let workingDirectory = "./markdown_files/" + domainInput;
 				let mostRecentDate: string = "";
 				for (const file of fs.readdirSync(workingDirectory)) {
@@ -30,27 +30,27 @@ const main = async () => {
 				workingDirectory += "/" + mostRecentDate;
 
 				if (analyzeInput === "0") {
-					const searchInput = prompt("search string: ");
+					const searchInput = prompt("\nsearch string:");
 					await searchByText(searchInput ?? "", workingDirectory);
 					break;
 				} else if (analyzeInput === "1") {
-					let promptInput = prompt("Agent prompt: ");
+					let promptInput = prompt("\nAgent prompt:");
 					while (true) {
 						if (promptInput) {
 							await AiPrompt(promptInput, workingDirectory);
 							break;
 						} else {
-							promptInput = prompt("Enter a prompt for the agent: ");
+							promptInput = prompt("\nEnter a prompt for the agent:");
 						}
 					}
 					break;
 				} else {
-					analyzeInput = prompt("Invalid input. Type either 0 or 1: ");
+					analyzeInput = prompt("\nInvalid input. Type either 0 or 1:");
 				}
 			}
 			break;
 		} else {
-			modeInput = prompt("Invalid input. Type either 0 or 1: ");
+			modeInput = prompt("\nInvalid input. Type either 0 or 1:");
 		}
 	}
 }
