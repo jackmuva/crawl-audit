@@ -1,6 +1,7 @@
 import figlet from "figlet";
 import fs from "fs";
 import { crawlAndWatch } from "./lib/crawl";
+import { searchByText } from "./lib/analyze";
 
 const main = async () => {
 	const welcomeMessage = figlet.textSync('Crawl Audit!');
@@ -21,6 +22,15 @@ const main = async () => {
 			while (true) {
 				let analyzeInput = prompt("Would you like to perform a string match [0] or an agent search [1] \n[Type either 0 or 1]:");
 				if (analyzeInput === "0") {
+					let workingDirectory = "./markdown_files/" + domainInput;
+					let mostRecentDate: string = "";
+					for (const file of fs.readdirSync(workingDirectory)) {
+						if (!mostRecentDate) mostRecentDate = file;
+						if (new Date(mostRecentDate) > new Date(file)) mostRecentDate = file;
+					}
+					workingDirectory += "/" + mostRecentDate;
+					const searchInput = prompt("search string: ");
+					searchByText(searchInput ?? "", workingDirectory);
 					break;
 				} else if (analyzeInput === "1") {
 					break;
@@ -45,9 +55,6 @@ const setupDirectoryEnv = (domain: string) => {
 
 	if (!fs.existsSync("./reports")) {
 		fs.mkdirSync("./reports");
-	}
-	if (!fs.existsSync("./reports/" + domain)) {
-		fs.mkdirSync("./reports/" + domain, { recursive: true });
 	}
 }
 
