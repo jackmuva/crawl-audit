@@ -55,8 +55,14 @@ export const crawlAndWatch = async (url: string) => {
 }
 
 const cleanMarkdown = (markdown: string): string => {
+	// Remove standalone inline SVG data URIs
+	let cleaned = markdown.replace(/^\s*!\[[^\]]*\]\(data:image\/svg\+xml,.*\)\s*$/gm, '');
+
+	// Remove standalone linked images (image wrapped in a link)
+	cleaned = cleaned.replace(/^\s*\[!\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
+
 	// Remove standalone images (inline or reference-style, excluding shortcut)
-	let cleaned = markdown.replace(/^\s*!\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
+	cleaned = cleaned.replace(/^\s*!\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
 
 	// Remove standalone links (inline or reference-style, excluding images and shortcuts)
 	cleaned = cleaned.replace(/^\s*(?<!!)\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
