@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/figlet": "^1.7.0"
@@ -11,6 +14,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@mendable/firecrawl-js": "^4.15.2",
     "figlet": "^1.10.0"
   }
 }
