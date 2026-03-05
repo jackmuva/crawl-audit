@@ -1,7 +1,6 @@
 import { generateText, type ModelMessage } from "ai";
 import { $ } from "bun";
 
-
 export const searchByText = async (text: string, dir: string) => {
 	$.cwd(dir);
 	let reportName = prompt("\nProvide a name for your report:");

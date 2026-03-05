@@ -34,6 +34,12 @@ const main = async () => {
 					await searchByText(searchInput ?? "", workingDirectory);
 					break;
 				} else if (analyzeInput === "1") {
+					const promptFiles = fs.readdirSync("./prompts")
+					console.log("available prompt files:");
+					for (const promptFile of promptFiles) {
+						console.log(promptFile);
+					}
+
 					let promptInput = prompt("\nAgent prompt:");
 					while (true) {
 						if (promptInput) {

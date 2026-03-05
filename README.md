@@ -9,10 +9,18 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To run (after setting env vars):
 
 ```bash
-bun run index.ts
+bun start
 ```
 
+## Dependencies
+1. Firecrawl
+2. AI Gateway
 
+In your .env file, set the following variables
+```
+FIRECRAWL_API_KEY=
+AI_GATEWAY_API_KEY=
+```
