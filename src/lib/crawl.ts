@@ -3,6 +3,7 @@ import Firecrawl, { type Document } from '@mendable/firecrawl-js';
 import fs from "fs";
 
 const firecrawl = new Firecrawl({ apiKey: process.env.FIRECRAWL_API_KEY });
+
 const MAX_PAGES_TO_CRAWL = 1000;
 
 export const crawlAndWatch = async (url: string) => {
@@ -20,6 +21,7 @@ export const crawlAndWatch = async (url: string) => {
 	const { id } = await firecrawl.startCrawl(url, {
 		limit: MAX_PAGES_TO_CRAWL,
 		crawlEntireDomain: true,
+		ignoreQueryParameters: true,
 	});
 
 	const watcher: Watcher = firecrawl.watcher(id, { kind: 'crawl', pollInterval: 2, timeout: undefined });
@@ -29,7 +31,7 @@ export const crawlAndWatch = async (url: string) => {
 			try {
 				if (doc.markdown) {
 					if (!fs.existsSync(workingDirectory + "/" + `${doc.metadata.url}.md`.replaceAll("/", "_"))) {
-						Bun.write(workingDirectory + "/" + `${doc.metadata.url}.md`.replaceAll("/", "_"), doc.markdown).then(() => {
+						Bun.write(workingDirectory + "/" + `${doc.metadata.url}.md`.replaceAll("/", "_"), cleanMarkdown(doc.markdown)).then(() => {
 							console.log('Crawled URL: ', doc.metadata?.url);
 						});
 					}
@@ -51,3 +53,20 @@ export const crawlAndWatch = async (url: string) => {
 
 	await watcher.start();
 }
+
+const cleanMarkdown = (markdown: string): string => {
+	// Remove standalone images (inline or reference-style, excluding shortcut)
+	let cleaned = markdown.replace(/^\s*!\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
+
+	// Remove standalone links (inline or reference-style, excluding images and shortcuts)
+	cleaned = cleaned.replace(/^\s*(?<!!)\[[^\]]*\](\([^)]*\)|\[[^\]]*\])\s*$/gm, '');
+
+	// Remove reference definitions
+	cleaned = cleaned.replace(/^\s*\[[^\]]*\]:\s*\S+.*$/gm, '');
+
+	// Clean up consecutive blank lines (3+ newlines -> 2 newlines)
+	cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+
+	return cleaned;
+}
+
