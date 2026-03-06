@@ -4,8 +4,6 @@ import fs from "fs";
 
 const firecrawl = new Firecrawl({ apiKey: process.env.FIRECRAWL_API_KEY });
 
-const MAX_PAGES_TO_CRAWL = 1000;
-
 export const crawlAndWatch = async (url: string) => {
 	const urlCache: { [url: string]: boolean } = {};
 
@@ -19,7 +17,7 @@ export const crawlAndWatch = async (url: string) => {
 	}
 
 	const { id } = await firecrawl.startCrawl(url, {
-		limit: MAX_PAGES_TO_CRAWL,
+		// limit: 1000,
 		crawlEntireDomain: true,
 		ignoreQueryParameters: true,
 	});

@@ -12,49 +12,20 @@ const main = async () => {
 
 	setupDirectoryEnv(domainInput);
 
-	let modeInput = prompt("\n[0] Crawl URL \n[1] Analyze last crawl \nType either 0 or 1:");
+	let modeInput = prompt("\n[0] Crawl & index URL \n[1] Analyze last crawl \nType either 0 or 1:");
 
 	while (true) {
 		if (modeInput === "0") {
 			await crawlAndWatch(domainInput.startsWith("https://") ? domainInput : "https://" + domainInput);
 			break;
 		} else if (modeInput === "1") {
-			while (true) {
-				let analyzeInput = prompt("\n[0] string match \n[1] agent \nType either 0 or 1:");
-				let workingDirectory = "./markdown_files/" + domainInput;
-				let mostRecentDate: string = "";
-				for (const file of fs.readdirSync(workingDirectory)) {
-					if (!mostRecentDate) mostRecentDate = file;
-					if (new Date(mostRecentDate) > new Date(file)) mostRecentDate = file;
-				}
-				workingDirectory += "/" + mostRecentDate;
-
-				if (analyzeInput === "0") {
-					const searchInput = prompt("\nsearch string:");
-					await searchByText(searchInput ?? "", workingDirectory);
-					break;
-				} else if (analyzeInput === "1") {
-					const promptFiles = fs.readdirSync("./prompts")
-					console.log("available prompt files:");
-					for (const promptFile of promptFiles) {
-						console.log(promptFile);
-					}
-
-					let promptInput = prompt("\nAgent prompt:");
-					while (true) {
-						if (promptInput) {
-							await AiPrompt(promptInput, workingDirectory);
-							break;
-						} else {
-							promptInput = prompt("\nEnter a prompt for the agent:");
-						}
-					}
-					break;
-				} else {
-					analyzeInput = prompt("\nInvalid input. Type either 0 or 1:");
-				}
+			if (fs.readdirSync("./markdown_files/" + domainInput).length === 0) {
+				console.error("Please crawl & index URL first!");
+				break;
+			} else {
+				await analyzeLoop(domainInput);
+				break;
 			}
-			break;
 		} else {
 			modeInput = prompt("\nInvalid input. Type either 0 or 1:");
 		}
@@ -76,6 +47,44 @@ const setupDirectoryEnv = (domain: string) => {
 
 	if (!fs.existsSync("./prompts")) {
 		fs.mkdirSync("./prompts");
+	}
+}
+
+const analyzeLoop = async (domainInput: string) => {
+	while (true) {
+		let analyzeInput = prompt("\n[0] string match \n[1] agent \nType either 0 or 1:");
+		let workingDirectory = "./markdown_files/" + domainInput;
+		let mostRecentDate: string = "";
+		for (const file of fs.readdirSync(workingDirectory)) {
+			if (!mostRecentDate) mostRecentDate = file;
+			if (new Date(mostRecentDate) > new Date(file)) mostRecentDate = file;
+		}
+		workingDirectory += "/" + mostRecentDate;
+
+		if (analyzeInput === "0") {
+			const searchInput = prompt("\nsearch string:");
+			await searchByText(searchInput ?? "", workingDirectory);
+			break;
+		} else if (analyzeInput === "1") {
+			const promptFiles = fs.readdirSync("./prompts")
+			console.log("available prompt files:");
+			for (const promptFile of promptFiles) {
+				console.log(promptFile);
+			}
+
+			let promptInput = prompt("\nAgent prompt (or prompt file):");
+			while (true) {
+				if (promptInput) {
+					await AiPrompt(promptInput, workingDirectory);
+					break;
+				} else {
+					promptInput = prompt("\nEnter a prompt for the agent:");
+				}
+			}
+			break;
+		} else {
+			analyzeInput = prompt("\nInvalid input. Type either 0 or 1:");
+		}
 	}
 }
 

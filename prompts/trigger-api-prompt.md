@@ -21,6 +21,11 @@ Paragon is launching a new API as a **part of ActionKit, called Triggers API**. 
 
 2. Triggers API: An API for users to subscribe to 3rd-party webhooks like GITHUB_ISSUE_CREATED. This is the new API product!
 
-Please read through the page and identify if this page needs to be changed/refactored. Respond in the following format:
+Because of the new launch of Triggers API, some of our pages/docs on ActionKit need to be refactored.
+Please read through the page and identify if this page needs to be changed/refactored.
+Pages that are mention triggers, but are focused on Paragon Workflows only, do not need to be refactored.
+Pages that mention ActionKit with some sort of trigger or webhook functionality (whether it's with Paragon Workflows) definitely need to be refactored to mention Triggers API as the trigger/webhook component of ActionKit.
+
+Respond in the following format:
 refactor: (yes/no)
 explanation: (if a refactor is necessary, provide a reason)
