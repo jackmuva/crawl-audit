@@ -1,5 +1,5 @@
-# crawl-audit
-Crawl Audit is a CLI tool that crawls the Paragon domain (or any domain), downloads all pages to markdown for
+# Crawl & Audit
+Crawl & Audit is a CLI tool that crawls the Paragon domain (or any domain), downloads all pages to markdown for
 text searching and agent-led actions
 
 ## Instalation & Runnning
@@ -26,7 +26,7 @@ AI_GATEWAY_API_KEY=
 ```
 
 ## Getting Started
-After starting the Crawl Audit CLI app:
+After starting the Crawl & Audit CLI app:
 1. Start by [0] Crawling and indexing your URL
 
 This will crawl through your domain and extract each page to markdown for easier reading and agent accessibility.

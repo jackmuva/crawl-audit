@@ -4,7 +4,7 @@ import { crawlAndWatch } from "./lib/crawl";
 import { AiPrompt, searchByText } from "./lib/analyze";
 
 const main = async () => {
-	const welcomeMessage = figlet.textSync('Crawl Audit');
+	const welcomeMessage = figlet.textSync('Crawl & Audit');
 	console.log(welcomeMessage);
 
 	let domainInput = prompt("\nDomain to crawl and analyze (default is useparagon.com):");
@@ -67,9 +67,9 @@ const analyzeLoop = async (domainInput: string) => {
 			break;
 		} else if (analyzeInput === "1") {
 			const promptFiles = fs.readdirSync("./prompts")
-			console.log("available prompt files:");
+			console.info("\navailable prompt files:");
 			for (const promptFile of promptFiles) {
-				console.log(promptFile);
+				console.info(promptFile);
 			}
 
 			let promptInput = prompt("\nAgent prompt (or prompt file):");
