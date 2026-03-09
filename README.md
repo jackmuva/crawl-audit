@@ -1,5 +1,5 @@
 # crawl-audit
-Crawl Audit is a CLI tool that crawls the Paragon domain, downloads all pages to markdown for
+Crawl Audit is a CLI tool that crawls the Paragon domain (or any domain), downloads all pages to markdown for
 text searching and agent-led actions
 
 ## Instalation & Runnning
